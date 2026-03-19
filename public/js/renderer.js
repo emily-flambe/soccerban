@@ -38,8 +38,14 @@ export class Renderer {
     const maxH = window.innerHeight - uiMargin;
     const maxW = window.innerWidth - 32; // small horizontal padding
     const fit = Math.floor(Math.min(maxW / cols, maxH / rows));
-    // Clamp between 32 and TILE_SIZE (preferred max)
-    return Math.max(32, Math.min(fit, this.tileSize));
+    // Snap to clean divisors of 512 (sprite size) for crisp pixel art
+    const steps = [32, 64, 128];
+    const clamped = Math.min(fit, this.tileSize);
+    let best = pow2[0];
+    for (const p of pow2) {
+      if (p <= clamped) best = p;
+    }
+    return best;
   }
 
   render(gameState) {
@@ -89,7 +95,7 @@ export class Renderer {
   }
 
   _drawWall(ctx, x, y, t) {
-    ctx.fillStyle = COLORS.wall;
+    ctx.fillStyle = '#2a2a2a'; // match wall sprite mortar color
     ctx.fillRect(x, y, t, t);
     if (this.sprites.wall) {
       ctx.drawImage(this.sprites.wall, x, y, t, t);
