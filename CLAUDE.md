@@ -63,6 +63,20 @@ Each level needs exactly one player and equal counts of balls and goals.
 
 Arrow keys / WASD — move | Z — undo | R — restart | Enter — next level (after win)
 
+## Agents
+
+Custom agents in `.claude/agents/` handle specialized tasks. Use `@agent-name` to invoke explicitly.
+
+| Agent | Role | Can edit code? |
+|-------|------|---------------|
+| `implementer` | Writes features and game code. Reads specs first. | Yes |
+| `tester` | Runs E2E tests, writes new tests, finds bugs. | Yes (tests only) |
+| `reviewer` | Reviews code for correctness, enforces critical rules. | No (read-only) |
+| `level-designer` | Designs puzzle levels, validates solvability. | Yes (levels only) |
+| `deployer` | Deploys to Cloudflare and verifies. | No (read-only) |
+
+**Typical workflow**: implementer writes code → tester attacks it → implementer fixes → reviewer approves → deployer ships.
+
 ## Working With Project Context
 
 This project uses a layered context system. Follow these rules to keep it healthy.
