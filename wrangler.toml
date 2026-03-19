@@ -1,0 +1,9 @@
+name = "soccerban"
+compatibility_date = "2026-03-18"
+
+[assets]
+directory = "./public"
+
+[[routes]]
+pattern = "soccerban.emilycogsdill.com"
+custom_domain = true
