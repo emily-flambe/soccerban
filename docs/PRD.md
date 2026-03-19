@@ -41,7 +41,7 @@ All balls are on goals. That's it. Pass/fail — no star ratings, no move counte
 
 ### What V1 does NOT include
 
-- No scoring, timers, or move tracking
+- No scoring or timers (move count is displayed as a convenience but is not a win/loss criterion)
 - No animations beyond basic tile transitions
 - No sound
 - No level editor

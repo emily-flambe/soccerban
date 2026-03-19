@@ -6,13 +6,13 @@
 
 Browser-based puzzle game. No backend. Pure client-side.
 
-### Tech decisions (TBD — pending setup agent)
+### Tech stack
 
-The setup agent is independently choosing the tech stack. This spec describes game logic and data structures only — it is stack-agnostic.
+Vanilla JavaScript with ES modules, HTML5 Canvas rendering, no build step. See `CLAUDE.md` and `docs/DECISIONS.md` for rationale.
 
 ## Game state
 
-The entire game state is a 10x10 grid where each cell contains zero or more entities.
+The entire game state is a rectangular grid where each cell contains zero or more entities.
 
 ### Entity types
 
@@ -33,7 +33,7 @@ A cell can contain:
 
 ### Level format
 
-Levels are defined as 10x10 character grids:
+Levels are defined as rectangular character grids (typically 10x10):
 
 ```
 . = floor
