@@ -13,6 +13,9 @@ export class Renderer {
     const toLoad = {
       player: 'assets/spherical-cat.png',
       ball: 'assets/soccer-ball.png',
+      wall: 'assets/wall.png',
+      goal: 'assets/goal.png',
+      floor: 'assets/floor.png',
     };
     this._spritesReady = Promise.all(
       Object.entries(toLoad).map(([key, src]) =>
@@ -30,12 +33,22 @@ export class Renderer {
     await this._spritesReady;
   }
 
+  _computeTileSize(rows, cols) {
+    const uiMargin = 160; // space for title, level name, status, controls
+    const maxH = window.innerHeight - uiMargin;
+    const maxW = window.innerWidth - 32; // small horizontal padding
+    const fit = Math.floor(Math.min(maxW / cols, maxH / rows));
+    // Clamp between 32 and TILE_SIZE (preferred max)
+    return Math.max(32, Math.min(fit, this.tileSize));
+  }
+
   render(gameState) {
     const { grid, rows, cols } = gameState;
-    this.canvas.width = cols * this.tileSize;
-    this.canvas.height = rows * this.tileSize;
+    const t = this._computeTileSize(rows, cols);
+    this.canvas.width = cols * t;
+    this.canvas.height = rows * t;
     const ctx = this.ctx;
-    const t = this.tileSize;
+    ctx.imageSmoothingEnabled = false;
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
@@ -43,16 +56,25 @@ export class Renderer {
         const x = c * t;
         const y = r * t;
 
-        // Background
-        ctx.fillStyle = COLORS.background;
-        ctx.fillRect(x, y, t, t);
+        // Background — grass for floor tiles, dark fill for walls
+        if (tile !== Tile.WALL && this.sprites.floor) {
+          ctx.drawImage(this.sprites.floor, x, y, t, t);
+        } else if (tile !== Tile.WALL) {
+          ctx.fillStyle = COLORS.background;
+          ctx.fillRect(x, y, t, t);
+        }
 
         // Goal marker (drawn underneath ball/player)
         if (tile === Tile.GOAL || tile === Tile.BALL_ON_GOAL || tile === Tile.PLAYER_ON_GOAL) {
-          ctx.fillStyle = COLORS.goal;
-          ctx.beginPath();
-          ctx.arc(x + t / 2, y + t / 2, t / 6, 0, Math.PI * 2);
-          ctx.fill();
+          if (this.sprites.goal) {
+            const padding = t * 0.05;
+            ctx.drawImage(this.sprites.goal, x + padding, y + padding, t - padding * 2, t - padding * 2);
+          } else {
+            ctx.fillStyle = COLORS.goal;
+            ctx.beginPath();
+            ctx.arc(x + t / 2, y + t / 2, t / 6, 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
 
         if (tile === Tile.WALL) {
@@ -69,6 +91,9 @@ export class Renderer {
   _drawWall(ctx, x, y, t) {
     ctx.fillStyle = COLORS.wall;
     ctx.fillRect(x, y, t, t);
+    if (this.sprites.wall) {
+      ctx.drawImage(this.sprites.wall, x, y, t, t);
+    }
   }
 
   _drawBall(ctx, x, y, t, tile) {

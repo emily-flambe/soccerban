@@ -29,7 +29,7 @@ export const Direction = {
 };
 
 // Rendering config
-export const TILE_SIZE = 48;
+export const TILE_SIZE = 96;
 
 export const COLORS = {
   background: '#16213e',

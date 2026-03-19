@@ -69,5 +69,8 @@ document.addEventListener('keydown', (e) => {
 // Wire up input
 input = new InputHandler({ onMove, onUndo, onRestart });
 
+// Re-render on resize
+window.addEventListener('resize', () => { if (game) renderer.render(game); });
+
 // Wait for sprites, then start
 renderer.waitForSprites().then(() => loadLevel(0));
