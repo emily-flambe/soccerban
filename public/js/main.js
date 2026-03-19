@@ -69,5 +69,5 @@ document.addEventListener('keydown', (e) => {
 // Wire up input
 input = new InputHandler({ onMove, onUndo, onRestart });
 
-// Start
-loadLevel(0);
+// Wait for sprites, then start
+renderer.waitForSprites().then(() => loadLevel(0));

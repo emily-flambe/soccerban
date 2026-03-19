@@ -15,11 +15,18 @@ These are non-negotiable design decisions. Do not change them without explicit u
 ## Development
 
 ```bash
-npm run dev      # Local dev server (wrangler)
-npm run deploy   # Deploy to Cloudflare Workers
+npm run dev        # Local dev server (wrangler)
+npm run deploy     # Deploy to Cloudflare Workers
+npm run test:e2e   # Run Playwright E2E tests
 ```
 
 After any commit that changes files in `public/`, deploy with `npm run deploy` and push to main immediately.
+
+## Testing
+
+Playwright E2E tests in `tests/e2e/`. Config in `playwright.config.js`. Tests auto-start `wrangler dev` on port 8788.
+
+Level solutions are documented as comments in `levels.js` — E2E tests replay these solutions to verify levels are solvable. When adding or modifying levels, update both the solution comments and the corresponding E2E tests.
 
 ## Architecture
 
@@ -32,6 +39,14 @@ ES modules in `public/js/`, loaded from `public/index.html` via `public/js/main.
 - **Constants** module defines tile types, directions, and rendering config.
 
 Use `Glob` to find specific files — don't rely on this list being exhaustive.
+
+## Assets
+
+Image assets live in `public/assets/`. The Renderer loads sprites with graceful fallback — if an image fails to load, it falls back to drawn shapes (circles/squares). To add a new sprite:
+
+1. Place the image in `public/assets/`
+2. Add it to the `toLoad` map in `Renderer._loadSprites()`
+3. Use it in the corresponding `_draw*` method with a fallback `else` branch
 
 ## Level Format
 

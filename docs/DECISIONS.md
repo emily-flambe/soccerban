@@ -2,6 +2,18 @@
 
 Architectural and design decisions with rationale. Newest first.
 
+## 2026-03-18: Playwright E2E tests
+
+**Decision**: Use Playwright for E2E testing. Tests auto-start wrangler dev on port 8788.
+
+**Rationale**: Game is canvas-based so unit testing rendering is impractical. E2E tests replay level solutions via keyboard input to verify game mechanics work end-to-end. Tests run against the same wrangler dev server used for local development.
+
+## 2026-03-18: Sprite system with graceful fallback
+
+**Decision**: Renderer loads image sprites from `public/assets/` with fallback to canvas-drawn shapes if images fail to load.
+
+**Rationale**: Allows progressive visual improvement without breaking the game. Images can be swapped or removed without code changes to game logic. Fallback ensures the game is always playable.
+
 ## 2026-03-18: Modular ES modules, no build step
 
 **Decision**: Structure as ES modules (`import`/`export`) served directly by the browser. No bundler.

@@ -5,6 +5,29 @@ export class Renderer {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.tileSize = TILE_SIZE;
+    this.sprites = {};
+    this._loadSprites();
+  }
+
+  _loadSprites() {
+    const toLoad = {
+      player: 'assets/spherical-cat.png',
+      ball: 'assets/soccer-ball.png',
+    };
+    this._spritesReady = Promise.all(
+      Object.entries(toLoad).map(([key, src]) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => { this.sprites[key] = img; resolve(); };
+          img.onerror = () => resolve(); // fall back to drawn shapes
+          img.src = src;
+        })
+      )
+    );
+  }
+
+  async waitForSprites() {
+    await this._spritesReady;
   }
 
   render(gameState) {
@@ -49,25 +72,41 @@ export class Renderer {
   }
 
   _drawBall(ctx, x, y, t, tile) {
-    ctx.fillStyle = tile === Tile.BALL_ON_GOAL ? COLORS.ballOnGoal : COLORS.ball;
-    ctx.beginPath();
-    ctx.arc(x + t / 2, y + t / 2, t / 3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = COLORS.ballOutline;
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
+    if (this.sprites.ball) {
+      const padding = t * 0.1;
+      ctx.drawImage(this.sprites.ball, x + padding, y + padding, t - padding * 2, t - padding * 2);
+      // Tint orange when on goal
+      if (tile === Tile.BALL_ON_GOAL) {
+        ctx.fillStyle = 'rgba(230, 126, 34, 0.35)';
+        ctx.beginPath();
+        ctx.arc(x + t / 2, y + t / 2, t / 2 - padding, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else {
+      ctx.fillStyle = tile === Tile.BALL_ON_GOAL ? COLORS.ballOnGoal : COLORS.ball;
+      ctx.beginPath();
+      ctx.arc(x + t / 2, y + t / 2, t / 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = COLORS.ballOutline;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
   }
 
   _drawPlayer(ctx, x, y, t) {
-    ctx.fillStyle = COLORS.player;
-    ctx.beginPath();
-    ctx.arc(x + t / 2, y + t / 2, t / 3, 0, Math.PI * 2);
-    ctx.fill();
-    // Eyes
-    ctx.fillStyle = COLORS.playerEye;
-    ctx.beginPath();
-    ctx.arc(x + t / 2 - 5, y + t / 2 - 4, 3, 0, Math.PI * 2);
-    ctx.arc(x + t / 2 + 5, y + t / 2 - 4, 3, 0, Math.PI * 2);
-    ctx.fill();
+    if (this.sprites.player) {
+      const padding = t * 0.05;
+      ctx.drawImage(this.sprites.player, x + padding, y + padding, t - padding * 2, t - padding * 2);
+    } else {
+      ctx.fillStyle = COLORS.player;
+      ctx.beginPath();
+      ctx.arc(x + t / 2, y + t / 2, t / 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = COLORS.playerEye;
+      ctx.beginPath();
+      ctx.arc(x + t / 2 - 5, y + t / 2 - 4, 3, 0, Math.PI * 2);
+      ctx.arc(x + t / 2 + 5, y + t / 2 - 4, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 }
