@@ -24,12 +24,16 @@ const COLORS = {
 // Level: a simple Sokoban puzzle
 // W=wall, .=empty, G=goal, B=ball, P=player, *=ball on goal, +=player on goal
 const LEVEL_STRING = [
-  'WWWWWW',
-  'W....W',
-  'W.PB.W',
-  'W..BGW',
-  'W..G.W',
-  'WWWWWW',
+  'WWWWWWWWWW',
+  'W........W',
+  'W........W',
+  'W..B.....W',
+  'W...P..G.W',
+  'W........W',
+  'W....B...W',
+  'W......G.W',
+  'W........W',
+  'WWWWWWWWWW',
 ];
 
 function parseLevel(lines) {
