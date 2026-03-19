@@ -24,6 +24,12 @@ h1 {
   color: #4ecca3;
 }
 
+#level-name {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #aaa;
+}
+
 canvas {
   border: 2px solid #4ecca3;
   background: #16213e;

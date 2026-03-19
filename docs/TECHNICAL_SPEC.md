@@ -132,10 +132,12 @@ Stack-agnostic description of what to draw:
 - Ball on goal: ball with goal indicator visible underneath
 - Minimal or no animation for V1
 
+## Design decisions (locked)
+
+- **Goals are floor.** A ball slides through a goal — goals do not stop movement. The player also walks over goals freely. You must engineer walls/obstacles to stop the ball exactly on the goal.
+- **Balls block balls.** A ball on a goal still acts as an obstacle for other sliding balls. This means a "scored" ball can be used as a wall for subsequent kicks — intentional and interesting for puzzle design.
+
 ## Open questions
 
-- [ ] What tech stack? (setup agent deciding)
 - [ ] How many levels for initial release?
 - [ ] Level progression UX (title screen? level complete screen?)
-- [ ] Should the player be blocked by goals, or can they walk over them freely? (current assumption: goals are floor, player walks over them)
-- [ ] Should a ball stop when it reaches a goal, or slide through? (current assumption: slides through — goals are not obstacles)

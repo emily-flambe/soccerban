@@ -24,7 +24,7 @@ Unlike classic Sokoban where pushed blocks move one tile, kicked balls **slide u
 | Player  | Small colored circle    | Moves one tile per input (arrow keys / WASD). Cannot walk through walls or balls at rest. |
 | Ball    | Larger circle, different color | When the player moves into a ball, it is **kicked** — it slides in that direction until blocked by a wall, grid edge, or another ball. |
 | Wall    | Filled square           | Static. Blocks all movement. |
-| Goal    | Square outline or X mark | A target location. Ball landing here = that ball is "scored." |
+| Goal    | Square outline or X mark | A target cell. Ball resting here = "scored." Goals are just floor — balls slide through them, they don't stop movement. |
 | Floor   | Empty / light color     | Passable by player and ball. |
 
 ### Win condition
