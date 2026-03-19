@@ -65,17 +65,24 @@ Arrow keys / WASD — move | Z — undo | R — restart | Enter — next level (
 
 ## Agents
 
-Custom agents in `.claude/agents/` handle specialized tasks. Use `@agent-name` to invoke explicitly.
+Custom agents in `.claude/agents/` handle specialized tasks. **Use these agents — do not do their jobs yourself.**
 
-| Agent | Role | Can edit code? |
-|-------|------|---------------|
-| `implementer` | Writes features and game code. Reads specs first. | Yes |
-| `tester` | Runs E2E tests, writes new tests, finds bugs. | Yes (tests only) |
-| `reviewer` | Reviews code for correctness, enforces critical rules. | No (read-only) |
-| `level-designer` | Designs puzzle levels, validates solvability. | Yes (levels only) |
-| `deployer` | Deploys to Cloudflare and verifies. | No (read-only) |
+| Trigger | Agent | What it does |
+|---------|-------|-------------|
+| User asks to implement a feature, fix a bug, or write game code | `implementer` | Writes code. Reads specs first. Does not test. |
+| After any code change, or user asks to test | `tester` | Runs `npm run test:e2e`, writes new tests, finds bugs. |
+| Before committing, or user asks for review | `reviewer` | Read-only review against critical rules checklist. Outputs APPROVE/BLOCK. |
+| User asks to create, modify, or balance levels | `level-designer` | Designs puzzles, validates solvability, documents solutions. |
+| After committing changes to `public/`, or user asks to deploy | `deployer` | Runs `npm run deploy`, verifies site is live. |
 
-**Typical workflow**: implementer writes code → tester attacks it → implementer fixes → reviewer approves → deployer ships.
+**Standard workflow for non-trivial changes:**
+1. `implementer` writes the code
+2. `tester` attacks it — goal is to find bugs
+3. `implementer` fixes what tester found
+4. `reviewer` checks correctness and enforces rules — BLOCK or APPROVE
+5. `deployer` ships it
+
+For small changes (config tweaks, single-line fixes, docs-only), skip the full pipeline — use your judgment.
 
 ## Working With Project Context
 
