@@ -1,63 +1,51 @@
-# Soccerban - Development Guide
+# Soccerban
 
-## Project Overview
+Sokoban-style browser puzzle game with a soccer theme. **Live at [soccerban.emilycogsdill.com](https://soccerban.emilycogsdill.com).**
 
-Sokoban-style browser puzzle game with a soccer theme. Kicked balls **slide until they hit an obstacle** (wall, another ball, or grid edge) — this is the core mechanic that distinguishes it from classic Sokoban. Deployed as static assets on Cloudflare Workers.
+## Critical Rules
 
-## Architecture
+These are non-negotiable design decisions. Do not change them without explicit user approval.
 
-- **No build step.** ES modules served directly from `public/`.
-- **No frameworks.** Vanilla HTML, CSS, and JavaScript.
-- **Rendering**: HTML5 Canvas
-- **Deployment**: Cloudflare Workers static assets via `wrangler deploy`
-- **Custom domain**: `soccerban.emilycogsdill.com`
+- **Balls SLIDE until blocked.** When kicked, a ball moves in that direction until hitting a wall, another ball, or the grid edge. This is NOT classic Sokoban push-one-tile. This is the core mechanic.
+- **Goals are floor.** Balls slide through/over goals. Goals do not stop movement. You must use walls or other balls to stop a ball on a goal.
+- **Balls block balls.** A scored ball (on a goal) still acts as an obstacle. This is intentional and important for puzzle design.
+- **No build step.** Vanilla JS with ES modules (`type="module"`). No bundlers, transpilers, or frameworks.
+- **No backend.** Pure client-side. Deployed as static assets on Cloudflare Workers.
 
-## File Structure
-
-- `wrangler.toml` — Cloudflare Workers config
-- `public/index.html` — Entry point
-- `public/style.css` — Styling
-- `public/js/constants.js` — Tile types, directions, colors, config
-- `public/js/levels.js` — Level definitions (data-driven)
-- `public/js/game.js` — GameState class (grid, sliding movement, undo, win detection)
-- `public/js/renderer.js` — Renderer class (canvas drawing)
-- `public/js/input.js` — InputHandler class (keyboard events)
-- `public/js/main.js` — Entry point, level progression wiring
-
-## Commands
+## Development
 
 ```bash
-npm run dev      # Local dev server with hot reload
+npm run dev      # Local dev server (wrangler)
 npm run deploy   # Deploy to Cloudflare Workers
 ```
 
-## Game Mechanics
+## Architecture
 
-- Player moves one tile per input (arrow keys / WASD)
-- Kicking a ball makes it **slide** in that direction until blocked
-- Goals are floor — balls slide through/over goals, goals don't stop movement
-- Balls block other balls (a scored ball acts as a wall for subsequent kicks)
-- Win condition: all balls resting on goals (no BALL tiles remain, only BALL_ON_GOAL)
+ES modules in `public/js/`. Entry point is `public/js/main.js`, loaded from `public/index.html`.
+
+- **GameState class** (`game.js`) — owns the grid, movement logic, undo stack, win detection
+- **Renderer class** (`renderer.js`) — draws GameState to a canvas
+- **InputHandler class** (`input.js`) — keyboard events, delegates to callbacks
+- **Level definitions** (`levels.js`) — data-driven array of level objects
+- **Constants** (`constants.js`) — tile types, directions, colors, rendering config
 
 ## Level Format
 
-Levels are defined in `public/js/levels.js` as objects with `id`, `name`, and `grid` (array of strings).
+Levels are objects in `levels.js` with `id`, `name`, and `grid` (array of strings). Any rectangular grid size works.
 
 ```
 # = wall    . = floor    P = player    B = ball
 G = goal    O = ball on goal    Q = player on goal
 ```
 
-Levels can be any rectangular size (not limited to 10x10).
+Each level needs exactly one player and equal counts of balls and goals.
 
 ## Controls
 
-- Arrow keys / WASD — move player
-- Z / Ctrl+Z — undo
-- R — restart level
-- Enter — next level (after winning)
+Arrow keys / WASD — move | Z — undo | R — restart | Enter — next level (after win)
 
-## Design Docs
+## Design References
 
-- `docs/PRD.md` — Product requirements (authoritative for game design decisions)
-- `docs/TECHNICAL_SPEC.md` — Technical spec (authoritative for data structures and algorithms)
+- `docs/PRD.md` — product requirements, game design decisions, aesthetic direction
+- `docs/TECHNICAL_SPEC.md` — data structures, algorithms, sliding logic specification
+- `docs/DECISIONS.md` — log of architectural and design decisions with rationale

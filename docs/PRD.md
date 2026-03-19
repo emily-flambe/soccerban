@@ -1,8 +1,5 @@
 # Soccerban — Product Requirements Document
 
-> **STATUS: DRAFT — NOT READY FOR DEVELOPMENT**
->
-> This document is under active design. Do not implement from this spec.
 > Last updated: 2026-03-18
 
 ## Overview
