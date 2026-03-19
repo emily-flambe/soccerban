@@ -44,7 +44,36 @@ Each level needs exactly one player and equal counts of balls and goals.
 
 Arrow keys / WASD — move | Z — undo | R — restart | Enter — next level (after win)
 
-## Design References
+## Working With Project Context
+
+This project uses a layered context system. Follow these rules to keep it healthy.
+
+### Before starting work
+
+1. **Read CLAUDE.md** (this file) — you're doing this now. The Critical Rules section is non-negotiable.
+2. **Check `docs/DECISIONS.md`** before proposing architectural changes — the decision may already be made.
+3. **Check `docs/PRD.md` and `docs/TECHNICAL_SPEC.md`** when working on game mechanics or data structures — these are authoritative.
+
+### After completing work
+
+1. **Update `docs/DECISIONS.md`** if you made any architectural or design decision (new module, new mechanic, changed data format, etc.). Include date, decision, and rationale.
+2. **Update project memory** (`~/.claude/projects/.../memory/project_overview.md`) if the project state changed meaningfully (new features, changed architecture, new files added).
+3. **Update this file (CLAUDE.md)** if you changed something that would cause another agent to break things — new critical rules, changed architecture, new commands.
+4. **Update `docs/PRD.md` or `docs/TECHNICAL_SPEC.md`** if your changes affect game design or technical specifications.
+
+### What goes where
+
+| Information | Where it lives |
+|-------------|---------------|
+| Rules that must not be violated | CLAUDE.md — Critical Rules |
+| Architecture overview | CLAUDE.md — Architecture |
+| Why a decision was made | `docs/DECISIONS.md` |
+| Game design intent and scope | `docs/PRD.md` |
+| Data structures and algorithms | `docs/TECHNICAL_SPEC.md` |
+| Current project state and progress | Project memory (`memory/project_overview.md`) |
+| Deployment and infrastructure details | Project memory (`memory/reference_deployment.md`) |
+
+### Design References
 
 - `docs/PRD.md` — product requirements, game design decisions, aesthetic direction
 - `docs/TECHNICAL_SPEC.md` — data structures, algorithms, sliding logic specification
