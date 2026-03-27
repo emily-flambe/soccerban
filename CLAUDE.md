@@ -118,3 +118,9 @@ This project uses a layered context system. Follow these rules to keep it health
 - `docs/PRD.md` — product requirements, game design decisions, aesthetic direction
 - `docs/TECHNICAL_SPEC.md` — data structures, algorithms, sliding logic specification
 - `docs/DECISIONS.md` — log of architectural and design decisions with rationale
+
+## Knowledge Graph (Agent-MCP)
+
+After significant changes (new features, architecture decisions, schema changes), save context to Agent-MCP using `update_project_context`. Use the key prefix `soccerban/` (e.g., `soccerban/architecture`).
+
+Update existing entries when information changes. Create new keys for new topics. This ensures any agent in any session can retrieve project context via `ask_project_rag`.
